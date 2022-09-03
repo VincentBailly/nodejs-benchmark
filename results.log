@@ -1,0 +1,355 @@
+
+
+Sun Sep 04 2022
+00:30:10 GMT+0200 (Central European Summer Time)
+
+Scenario: perf measurement
+Percentiles:
+  - p10: 0.00330
+  - p50: 0.00354
+  - p90: 0.00551
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:33:50 GMT+0200 (Central European Summer Time)
+
+Scenario: "perf measurement"
+Env:
+  - loops: 500
+Percentiles:
+  - p10: 0.00326
+  - p50: 0.00355
+  - p90: 0.00549
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:37:29 GMT+0200 (Central European Summer Time)
+
+Scenario: "empty function declaration"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 0.00326
+  - p50: 0.00356
+  - p90: 0.00546
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    function foo() {}
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:43:24 GMT+0200 (Central European Summer Time)
+
+Scenario: "empty for loop of 1000 iterations"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 0.0513
+  - p50: 0.0529
+  - p90: 0.0562
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    for (let i = 0; i < 1000; i++) {}
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:47:58 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 1000 empty objects"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 0.0635
+  - p50: 0.0659
+  - p90: 0.0702
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        let a = {}
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:49:39 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 10000 empty objects"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 0.206
+  - p50: 0.212
+  - p90: 0.222
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    for (let i = 0; i < 10000; i++) {
+        let a = {}
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:51:08 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 100000 empty objects"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 1.38
+  - p50: 1.42
+  - p90: 1.46
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    for (let i = 0; i < 100000; i++) {
+        let a = {}
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:53:09 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 1000000 empty objects"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 1.98
+  - p50: 2.01
+  - p90: 2.06
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        let a = {}
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:54:55 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 10000000 empty objects"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 7.83
+  - p50: 7.88
+  - p90: 7.96
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    for (let i = 0; i < 10000000; i++) {
+        let a = {}
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+00:58:11 GMT+0200 (Central European Summer Time)
+
+Scenario: "call 1000000 times an empty function"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 1.51
+  - p50: 1.55
+  - p90: 1.57
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    function noop() {}
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        noop();
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+01:01:16 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 1 million times the same string"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 1.35
+  - p50: 1.36
+  - p90: 1.38
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    let str;
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        str = 'hello world';
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+01:04:23 GMT+0200 (Central European Summer Time)
+
+Scenario: "iterate 1 million times in an empty for-loop"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 1.35
+  - p50: 1.37
+  - p90: 1.39
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+01:10:21 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 1 million empty arrays"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 55.2
+  - p50: 56.8
+  - p90: 57.8
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    let arr = []
+    // store the result in an array to be sure they are
+    // not garbage collected
+    // initialize the array to store them so it does not count
+    // in the measurement
+    for (let i = 0; i < 1000000; i++) {
+        arr.push(undefined);
+    }
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        arr[i] = []
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+01:13:34 GMT+0200 (Central European Summer Time)
+
+Scenario: "create 1 million empty objects"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 66.0
+  - p50: 76.2
+  - p90: 79.0
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    let arr = []
+    // store the result in an array to be sure they are
+    // not garbage collected
+    // initialize the array to store them so it does not count
+    // in the measurement
+    for (let i = 0; i < 1000000; i++) {
+        arr.push(undefined);
+    }
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        arr[i] = {}
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
+
+
+Sun Sep 04 2022
+01:16:11 GMT+0200 (Central European Summer Time)
+
+Scenario: "fill an array with 1 million integers"
+Env:
+  - loops: 1000
+Percentiles:
+  - p10: 12.2
+  - p50: 12.3
+  - p90: 12.5
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    let arr = []
+    // store the result in an array to be sure they are
+    // not garbage collected
+    // initialize the array to store them so it does not count
+    // in the measurement
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        arr.push(1)
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+```
