@@ -255,7 +255,239 @@ scenarios['10000 empty iterations with promise.then()'] = function() {
     }
     p.then(callback);
 }
-
+scenarios['read 1000 files of size 7Kb serially'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    for (let i = 0; i < 1000; i++) {
+        fs.writeFileSync(`test-files/file-${i}`, buff);
+    }
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        fs.readFileSync(`test-files/file-${i}`);
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+    fs.rmSync('test-files', { force: true, recursive: true });
+}
+scenarios['read 100000 files of size 7Kb serially'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    for (let i = 0; i < 100000; i++) {
+        fs.writeFileSync(`test-files/file-${i}`, buff);
+    }
+    ti = now();
+    for (let i = 0; i < 100000; i++) {
+        fs.readFileSync(`test-files/file-${i}`);
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+    fs.rmSync('test-files', { force: true, recursive: true });
+}
+scenarios['read 1000 files of size 7Kb async'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    for (let i = 0; i < 1000; i++) {
+        fs.writeFileSync(`test-files/file-${i}`, buff);
+    }
+    let j = 0;
+    function done() {
+        if ( ++j === 1000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        fs.readFile(`test-files/file-${i}`, done);
+    }
+}
+scenarios['write 1000 files of size 7Kb serially'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        fs.writeFileSync(`test-files/file-${i}`, buff);
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+    fs.rmSync('test-files', { force: true, recursive: true });
+}
+scenarios['write 1000 files of size 7Kb async'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    function done() {
+        if ( ++j === 1000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        fs.writeFile(`test-files/file-${i}`, buff, done);
+    }
+}
+scenarios['write 10000 files of size 7Kb serially'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    ti = now();
+    for (let i = 0; i < 10000; i++) {
+        fs.writeFileSync(`test-files/file-${i}`, buff);
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+    fs.rmSync('test-files', { force: true, recursive: true });
+}
+scenarios['write 10000 files of size 7Kb async'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    function done() {
+        if ( ++j === 10000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 10000; i++) {
+        fs.writeFile(`test-files/file-${i}`, buff, done);
+    }
+}
+scenarios['write 100000 files of size 7Kb serially'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    ti = now();
+    for (let i = 0; i < 100000; i++) {
+        fs.writeFileSync(`test-files/file-${i}`, buff);
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+    fs.rmSync('test-files', { force: true, recursive: true });
+}
+scenarios['write 100000 files of size 7Kb async'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    function done() {
+        if ( ++j === 100000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 100000; i++) {
+        fs.writeFile(`test-files/file-${i}`, buff, done);
+    }
+}
+scenarios['write 100000 files of size 7Kb async with limit of 1000'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    let started = 0;
+    function done() {
+        if ( ++j === 100000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        } else {
+            if (started < 100000 && j - started < 1000) {
+                started++;
+                fs.writeFile(`test-files/file-${started}`, buff, done);
+            }
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        started++;
+        fs.writeFile(`test-files/file-${i}`, buff, done);
+    }
+}
+scenarios['write 100000 files of size 7Kb async with limit of 100'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    let started = 0;
+    function done() {
+        if ( ++j === 100000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        } else {
+            if (started < 100000 && j - started < 100) {
+                started++;
+                fs.writeFile(`test-files/file-${started}`, buff, done);
+            }
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 100; i++) {
+        started++;
+        fs.writeFile(`test-files/file-${i}`, buff, done);
+    }
+}
+scenarios['write 100000 files of size 7Kb async with limit of 10000'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    let started = 0;
+    function done() {
+        if ( ++j === 100000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        } else {
+            if (started < 100000 && j - started < 10000) {
+                started++;
+                fs.writeFile(`test-files/file-${started}`, buff, done);
+            }
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 10000; i++) {
+        started++;
+        fs.writeFile(`test-files/file-${i}`, buff, done);
+    }
+}
 
 
 
@@ -303,6 +535,7 @@ ${scenarioCode}
 
 fs.appendFileSync('results.log', report);
 
+console.log(percentiles)
 
 function getPercentiles(result) {
     result.sort();
