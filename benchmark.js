@@ -137,10 +137,6 @@ scenarios['create 1 million empty objects'] = function() {
 scenarios['fill an array with 1 million integers'] = function() {
     now = require('perf_hooks').performance.now;
     let arr = []
-    // store the result in an array to be sure they are
-    // not garbage collected
-    // initialize the array to store them so it does not count
-    // in the measurement
     ti = now();
     for (let i = 0; i < 1000000; i++) {
         arr.push(1)
@@ -148,6 +144,118 @@ scenarios['fill an array with 1 million integers'] = function() {
     tf = now();
     process.stdout.write((tf-ti).toString());
 }
+scenarios['fill a linked-list with 1 million integers'] = function() {
+    now = require('perf_hooks').performance.now;
+    let arr = { };
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        arr.next = {value : 1}
+        arr = arr.next;
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+}
+scenarios['assign 1 million times a variable'] = function() {
+    now = require('perf_hooks').performance.now;
+    let variable;
+    ti = now();
+    for (let i = 0; i < 1000000; i++) {
+        variable = 1;
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+}
+scenarios['assign 1 million times a variable with eval()'] = function() {
+    now = require('perf_hooks').performance.now;
+    let variable;
+    ti = now();
+    let code = 'variable = 1';
+    for (let i = 0; i < 1000000; i++) {
+        eval(code);
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+}
+scenarios['assign 1 million times a variable with a function call'] = function() {
+    now = require('perf_hooks').performance.now;
+    let variable;
+    ti = now();
+    let fn = function () {variable = 1 }
+    for (let i = 0; i < 1000000; i++) {
+        fn();
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+}
+scenarios['assign 1 million times a variable with a lambda function call'] = function() {
+    now = require('perf_hooks').performance.now;
+    let variable;
+    ti = now();
+    let fn =  () => {variable = 1 }
+    for (let i = 0; i < 1000000; i++) {
+        fn();
+    }
+    tf = now();
+    process.stdout.write((tf-ti).toString());
+}
+scenarios['10000 empty iterations with callbacks'] = function() {
+    now = require('perf_hooks').performance.now;
+    let i = 0;
+    let ti = now();
+    function callback() {
+        if (++i === 10000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+        } else {
+            callback()
+        }
+    }
+    callback();
+}
+scenarios['10000 empty iterations with process.nextTick()'] = function() {
+    now = require('perf_hooks').performance.now;
+    let i = 0;
+    let ti = now();
+    function callback() {
+        if (++i === 10000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+        } else {
+            process.nextTick(callback)
+        }
+    }
+    process.nextTick(callback);
+}
+scenarios['10000 empty iterations with setImmediate'] = function() {
+    now = require('perf_hooks').performance.now;
+    let i = 0;
+    let ti = now();
+    function callback() {
+        if (++i === 10000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+        } else {
+            setImmediate(callback)
+        }
+    }
+    setImmediate(callback);
+}
+scenarios['10000 empty iterations with promise.then()'] = function() {
+    now = require('perf_hooks').performance.now;
+    let i = 0;
+    let ti = now();
+    let p = Promise.resolve();
+    function callback() {
+        if (++i === 10000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+        } else {
+            p.then(callback)
+        }
+    }
+    p.then(callback);
+}
+
 
 
 
