@@ -488,6 +488,32 @@ scenarios['write 100000 files of size 7Kb async with limit of 10000'] = function
         fs.writeFile(`test-files/file-${i}`, buff, done);
     }
 }
+scenarios['write 100000 files of size 7Kb async promise with limit of 1000'] = function () {
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    let started = 0;
+    function done() {
+        if ( ++j === 100000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        } else {
+            if (started < 100000 && j - started < 1000) {
+                started++;
+                fs.promises.writeFile(`test-files/file-${started}`, buff).then(done);
+            }
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        started++;
+        fs.promises.writeFile(`test-files/file-${i}`, buff).then(done);
+    }
+}
 
 
 
@@ -504,7 +530,13 @@ duration = parseInt(process.env['dur'])
 loops = parseInt(process.env['loops'])
 
 for (let j = 0; j < loops; j++) {
-    output = child_process.spawnSync('node', ['tmp.js']).stdout.toString()
+    cp = child_process.spawnSync('node', ['tmp.js']);
+    err = cp.stderr.toString()
+    output = cp.stdout.toString()
+    if (process.env['debug']) {
+        console.log({err, output});
+        process.exit();
+    }
     duration = parseFloat(output)
 
     result.push(duration);

@@ -1103,3 +1103,83 @@ Code:
         fs.writeFile(`test-files/file-${i}`, buff, done);
     }
 ```
+
+
+Sun Sep 04 2022
+23:13:11 GMT+0200 (Central European Summer Time)
+
+Scenario: "write 100000 files of size 7Kb async promise with limit of 10000"
+Env:
+  - loops: 10
+Percentiles:
+  - p10: NaN
+  - p50: NaN
+  - p90: NaN
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    let started = 0;
+    function done() {
+        if ( ++j === 100000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        } else {
+            if (started < 100000 && j - started < 10000) {
+                started++;
+                fs.promises.writeFile(`test-files/file-${started}`, buff).then(done);
+            }
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 10000; i++) {
+        started++;
+        fs.promises.writeFile(`test-files/file-${i}`, buff).then(done);
+    }
+```
+
+
+Sun Sep 04 2022
+23:18:38 GMT+0200 (Central European Summer Time)
+
+Scenario: "write 100000 files of size 7Kb async promise with limit of 1000"
+Env:
+  - loops: 10
+Percentiles:
+  - p10: 1490
+  - p50: 1530
+  - p90: 1560
+
+Code:
+```
+    now = require('perf_hooks').performance.now;
+    fs = require('fs');
+    fs.rmSync('test-files', { force: true, recursive: true });
+    fs.mkdirSync('test-files');
+    const buff = Buffer.allocUnsafe(1024 * 7);
+    let j = 0;
+    let started = 0;
+    function done() {
+        if ( ++j === 100000) {
+            tf = now();
+            process.stdout.write((tf-ti).toString());
+            fs.rmSync('test-files', { force: true, recursive: true });
+        } else {
+            if (started < 100000 && j - started < 1000) {
+                started++;
+                fs.promises.writeFile(`test-files/file-${started}`, buff).then(done);
+            }
+        }
+    }
+    ti = now();
+    for (let i = 0; i < 1000; i++) {
+        started++;
+        fs.promises.writeFile(`test-files/file-${i}`, buff).then(done);
+    }
+```
